@@ -1,0 +1,45 @@
+version: "2"
+services:
+
+  #backend web application, scale this with docker-compose scale web=3
+  web:
+    image: jwilder/whoami:latest
+    environment:
+      SERVICE_8080_NAME: http
+      SERVICE_NAME: web
+      SERVICE_TAGS: backend
+    ports:
+    - "8080"
+
+    
+  #load balancer will automatically update the config using consul-template
+  lb:
+    image: millken/nginx-consul-template:latest
+    hostname: lb
+    links:
+    - consul
+    ports:
+    - "80:80"
+    depends_on:
+    - consul    
+
+  consul:
+    image: consul:latest
+    ports:
+      - "8300"
+      - "8400"
+      - "8500:8500"
+      - "8600:53/udp"    
+
+  # listen on local docker sock to register the container with public ports to the consul service
+  registrator:
+    image: gliderlabs/registrator:master
+    hostname: registrator
+    links:
+      - consul
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock"
+    command: -internal consul://consul:8500
+    #command: consul://consul:8500
+    depends_on:
+      - consul    
