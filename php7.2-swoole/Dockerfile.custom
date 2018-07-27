@@ -1,0 +1,33 @@
+FROM alpine:3.7
+
+ENV TIMEZONE Asia/Shanghai
+ENV PHP_VERSION 7.2.4
+ENV PROTOBUF_VERSION 3.6.0
+ENV REDIS_VERSION 4.1.0
+ENV SWOOLE_VERSION 4.0.3
+ENV YAC_VERSION 2.0.2
+ENV GRPC_VERSION 1.13.0
+
+LABEL Maintainer="millken <millken@gmail.com>" \
+      Description="Lightweight php 7.2 container based on alpine with Composer installed and swoole installed." 
+
+COPY tmp/ /tmp/
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.shu.edu.cn/g' /etc/apk/repositories \
+  	&& apk update \
+	&& cd /tmp/ 
+
+RUN test -f /tmp/php-${PHP_VERSION}.tar.xz || wget http://hk2.php.net/distributions/php-${PHP_VERSION}.tar.xz
+RUN test -f /tmp/swoole-${SWOOLE_VERSION}.tgz || wget http://pecl.php.net/get/swoole-${SWOOLE_VERSION}.tgz
+RUN test -f /tmp/protobuf-${PROTOBUF_VERSION}.tgz || wget http://pecl.php.net/get/protobuf-${PROTOBUF_VERSION}.tgz
+RUN test -f /tmp/yac-${YAC_VERSION}.tgz || wget http://pecl.php.net/get/yac-${YAC_VERSION}.tgz
+RUN test -f /tmp/redis-${REDIS_VERSION}.tgz || wget http://pecl.php.net/get/redis-${REDIS_VERSION}.tgz
+RUN test -f /tmp/grpc-${GRPC_VERSION}.tgz || wget http://pecl.php.net/get/grpc-${GRPC_VERSION}.tgz
+
+RUN mkdir /var/www
+
+WORKDIR /var/www
+
+VOLUME ["/var/www"]
+
+
+CMD ["/bin/sh"]

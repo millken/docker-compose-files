@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+
+  mktty:
+    image: test
+    links:
+        - db
+    ports:
+    - 6021:6021  
+    command: mktty -c /etc/mktty.conf
+  db:
+    image: postgres:9.6-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      
+volumes:
+  pgdata:
+    external: true
