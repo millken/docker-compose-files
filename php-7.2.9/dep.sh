@@ -4,6 +4,7 @@ export PROTOBUF_VERSION="3.6.1"
 export REDIS_VERSION="4.1.1"
 export SWOOLE_VERSION="4.1.2"
 export YAC_VERSION="2.0.2"
+export COMPOSER_VERSION="1.7.2"
 [ -d tmp ] || mkdir tmp;
 cd tmp;
 [ -f php-${PHP_VERSION}.tar.xz ] || wget http://hk2.php.net/distributions/php-${PHP_VERSION}.tar.xz;
@@ -11,3 +12,4 @@ cd tmp;
 [ -f protobuf-${PROTOBUF_VERSION}.tgz ] || wget http://pecl.php.net/get/protobuf-${PROTOBUF_VERSION}.tgz
 [ -f redis-${REDIS_VERSION}.tgz ] || wget http://pecl.php.net/get/redis-${REDIS_VERSION}.tgz
 [ -f yac-${YAC_VERSION}.tgz ] || wget http://pecl.php.net/get/yac-${YAC_VERSION}.tgz;
+[ -f composer.phar ] || wget https://getcomposer.org/download/{COMPOSER_VERSION}/composer.phar;
