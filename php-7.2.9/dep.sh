@@ -12,4 +12,4 @@ cd tmp;
 [ -f protobuf-${PROTOBUF_VERSION}.tgz ] || wget http://pecl.php.net/get/protobuf-${PROTOBUF_VERSION}.tgz
 [ -f redis-${REDIS_VERSION}.tgz ] || wget http://pecl.php.net/get/redis-${REDIS_VERSION}.tgz
 [ -f yac-${YAC_VERSION}.tgz ] || wget http://pecl.php.net/get/yac-${YAC_VERSION}.tgz;
-[ -f composer.phar ] || wget https://getcomposer.org/download/{COMPOSER_VERSION}/composer.phar;
+[ -f composer.phar ] || wget https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar;

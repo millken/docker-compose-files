@@ -35,8 +35,10 @@ RUN set -ex \
 		xz \
 		libpq \
 		hiredis \
-		libstdc++
-		
+		libstdc++ \
+		tzdata \
+	&& echo "${TIMEZONE}" > /etc/timezone \ 
+	&& ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime 		
 RUN set -ex \
 	&& cd /tmp/ \
 	&& ([ -f /tmp/php-${PHP_VERSION}.tar.xz ] || wget http://hk2.php.net/distributions/php-${PHP_VERSION}.tar.xz) \
@@ -46,7 +48,8 @@ RUN set -ex \
 		CPPFLAGS="$PHP_CPPFLAGS" \
 		LDFLAGS="$PHP_LDFLAGS" \
     && cd /tmp/php-${PHP_VERSION} \
-    && ./configure --enable-inline-optimization --prefix=/usr/local --with-config-file-path="$PHP_INI_DIR" --disable-cgi --enable-opcache --enable-fpm --with-config-file-scan-dir="$PHP_INI_DIR/conf.d" --enable-bcmath --enable-posix  --enable-sysvshm --enable-sysvsem --enable-sigchild --enable-mbstring --with-iconv  --with-pdo-pgsql -with-pdo-mysql -with-pgsql=/usr/local/pgsql  --with-zlib-dir=/usr/include/ --with-openssl --enable-pdo --enable-phar  --enable-session --enable-tokenizer --enable-hash --enable-json --disable-debug --disable-short-tags --disable-ipv6 --disable-rpath --enable-option-checking=fatal --with-mhash --with-curl \
+    && ./configure --enable-inline-optimization --prefix=/usr/local --with-config-file-path="$PHP_INI_DIR" --enable-opcache --with-config-file-scan-dir="$PHP_INI_DIR/conf.d"  --enable-posix  --enable-sysvshm --enable-sysvsem --enable-sigchild --enable-mbstring --with-iconv  --with-pdo-pgsql -with-pdo-mysql -with-pgsql=/usr/local/pgsql  --with-zlib-dir=/usr/include/ --enable-bcmath --with-openssl --enable-pdo --enable-session --enable-tokenizer --enable-hash --enable-json --disable-debug --disable-short-tags --disable-ipv6 --enable-option-checking=fatal --with-mhash --with-curl \
+	$PHP_EXTRA_CONFIGURE_ARGS \
     && make -j8 \
 	&& make install \
 	&& make clean \
